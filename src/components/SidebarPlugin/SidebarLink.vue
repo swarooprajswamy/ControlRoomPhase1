@@ -37,7 +37,9 @@ export default {
   },
   methods: {
     hideSidebar() {
-      
+      if(this.default){
+        this.$sidebar.displaySidebar(false);
+      }
     },
     isActive() {
       return this.$el.classList.contains("active");

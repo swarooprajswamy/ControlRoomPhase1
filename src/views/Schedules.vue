@@ -12,13 +12,16 @@
           sortMode="multiple"
           :multiSortMeta="multiSortMeta"
           :filters.sync="filters" 
-          :scrollable="true" scrollHeight="flex"
+          :scrollable="true" 
+          scrollHeight="flex"
           @row-reorder="onRowReorder"
           ref="dt"
-          :selection.sync="selectedSchedule" selectionMode="single" dataKey="vin"
-          contextMenu :contextMenuSelection.sync="selectedSchedule" @row-contextmenu="onRowContextMenu"
+           selectionMode="single" dataKey="vin"
+          contextMenu :contextMenuSelection.sync="selectedSchedule" 
+          @row-contextmenu="onRowContextMenu"
            class="p-datatable-sm"
           >
+          <!-- :selection.sync="selectedSchedule" -->
             <template #empty>
                 No records found
             </template>
@@ -28,7 +31,6 @@
              <template #header>
                 <div>
                    <div style="float: left">
-                    <Button icon="pi pi-refresh"/>
                     List of Schedules
                     </div>
                   <div style="float: right">

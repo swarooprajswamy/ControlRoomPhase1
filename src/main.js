@@ -1,10 +1,10 @@
 import Vue from 'vue';
 import App from './App.vue';
 import router from './script/router/index';
-import PaperDashboard from './plugins/paperDashboard';
+import Dashboard from './plugins/Dashboard';
 
 Vue.config.productionTip = false
-Vue.use(PaperDashboard);
+Vue.use(Dashboard);
 
 new Vue({
   router,

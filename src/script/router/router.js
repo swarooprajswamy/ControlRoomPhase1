@@ -8,6 +8,8 @@ import NotFound from '../../views/NotFoundPage.vue';
 import Dashboard from '../../views/Dashboard.vue';
 import Jobs from '../../views/Jobs.vue';
 import Schedules from '../../views/Schedules.vue';
+import Machine from '../../views/Machine.vue';
+import Package from '../../views/Package.vue';
 
 const routes = [{
         path: "/",
@@ -28,6 +30,16 @@ const routes = [{
                 path: "schedules",
                 name: "schedules",
                 component: Schedules
+            },
+            {
+                path: "machine",
+                name: "machine",
+                component: Machine
+            },
+            {
+                path: "package",
+                name: "package",
+                component: Package
             }
     ]},
     { path: "*", component: NotFound }

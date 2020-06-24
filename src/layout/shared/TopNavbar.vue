@@ -1,10 +1,6 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">{{ routeName }}</a>
-      <ul class="navbar-nav" >
-            
-          </ul>
       <button class="navbar-toggler navbar-burger"
               type="button"
               @click="toggleSidebar"
@@ -13,26 +9,26 @@
         <span class="navbar-toggler-bar"></span>
         <span class="navbar-toggler-bar"></span>
       </button>
+      <a class="navbar-brand" href="#">{{ routeName }}</a>
       <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-panel"></i>
-              <p>Stats</p>
-            </a>
-          </li>
-          
-          <li class="nav-item">
-            <a href="#" class="nav-link">
-              <i class="ti-settings"></i>
-              <p>
-                Settings
-              </p>
-            </a>
-          </li>
+          <div class="collapse navbar-collapse">
+            <drop-down 
+            tag = "li"
+            class="nav-item"
+            title="Profile"
+            title-classes="nav-link"
+            icon="ti-user" >
+            <a slot="options" class="dropdown-item" href="#">Update</a>
+            <a slot="options" class="dropdown-item" href="#">Settings</a>
+            <a slot="options" class="dropdown-item" href="#">Roles</a>
+            <a slot="options" class="dropdown-item" href="#">LogOut</a>
+            </drop-down>
+          </div>
         </ul>
       </div>
-    </div></nav>
+    </div>
+    </nav>
 </template>
 <script>
 export default {

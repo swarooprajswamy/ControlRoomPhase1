@@ -1,5 +1,7 @@
 
+// Plugins
 import Sidebar from '../components/SidebarPlugin';
+import GlobalComponents from './GlobalComponents';
 
 // PrimeVue Components  -- https://github.com/primefaces/primevue/
 import PrimeVueDataTable from "primevue/datatable"
@@ -16,14 +18,22 @@ import "es6-promise/auto";
 
 //css assets
 import "bootstrap/dist/css/bootstrap.css";
+// import "@/assets/sass/light-bootstrap-dashboard.scss";
+// import "@/assets/sass/white-dashboard.scss";
+// import "@/assets/sass/black-dashboard.scss";
 import "@/assets/sass/paper-dashboard.scss";
 import "@/assets/css/themify-icons.css";
-import '@/assets/css/theme.css';
+// import '../../public/themes/luna-amber/theme.css';
+// import '../../public/themes/nova/theme.css';
+// import '../../public/themes/nova-alt/theme.css';
+// import '../../public/themes/blackDashboardTheme.css';
+import '../../public/themes/paperDashboardTheme.css';
 
 
 export default  {
     install(Vue){
         Vue.use(Sidebar);
+        Vue.use(GlobalComponents);
         Vue.component('DataTable',PrimeVueDataTable);
         Vue.component('Column',PrimeVueColumn);
         Vue.component('InputText',PrimeVueInputText);

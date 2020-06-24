@@ -15,10 +15,13 @@
           :scrollable="true" scrollHeight="flex"
           @row-reorder="onRowReorder"
           ref="dt"
-          :selection.sync="selectedJob" selectionMode="single" dataKey="vin"
-          contextMenu :contextMenuSelection.sync="selectedJob" @row-contextmenu="onRowContextMenu"
+          selectionMode="single" 
+          dataKey="vin"
+          contextMenu :contextMenuSelection.sync="
+          selectedJob" @row-contextmenu="onRowContextMenu"
            class="p-datatable-sm"
           >
+          <!-- :selection.sync="selectedJob"  -->
             <template #empty>
                 No records found
             </template>
@@ -28,8 +31,7 @@
              <template #header>
                 <div>
                    <div style="float: left">
-                    <Button icon="pi pi-refresh"/>
-                    List of Jobs
+                    Jobs List
                     </div>
                   <div style="float: right">
                       <i class="pi pi-search" style="margin: 4px 4px 0px 0px;"></i>
@@ -41,82 +43,71 @@
                 </div>
             </template>
             <ContextMenu :model="menuModel" ref="cm" />
-            <Column field="Process" header="Process" :sortable="true" filterMatchMode="Starts with">
+            <Column field="name" header="Name" :sortable="true" filterMatchMode="Starts with">
                 <template #filter>
-                    <InputText  style="width: 100px;" type="text" v-model="filters['Process']" class="p-column-filter" placeholder="Process" />
+                    <InputText  style="width: 100px;" type="text" v-model="filters['name']" class="p-column-filter" placeholder="Name" />
                 </template>
                 <template #loading>
                   <span class="loading-text"></span>
               </template>
               <template #body="slotProps">
-                  {{slotProps.data.Process}}
+                  {{slotProps.data.name}}
               </template>
             </Column>
-            <Column field="Robot" header="Robot" :sortable="true" filterMatchMode="Contains">
+            <Column field="machine" header="Machine" :sortable="true" filterMatchMode="Contains">
                 <template #filter>
-                    <InputText  style="width: 100px;"  type="text" v-model="filters['Robot']" class="p-column-filter" placeholder="Robot" />
+                    <InputText  style="width: 100px;"  type="text" v-model="filters['machine']" class="p-column-filter" placeholder="Machine" />
                 </template>
                 <template #loading>
                   <span class="loading-text"></span>
               </template>
               <template #body="slotProps">
-                  {{slotProps.data.Robot}}
+                  {{slotProps.data.machine.name}}
               </template>
             </Column>
-            <Column field="Enivronment" header="Enivronment" :sortable="true" filterMatchMode="in">
+            <Column field="package" header="Package" :sortable="true" filterMatchMode="in">
                 <template #filter>
-                    <InputText  style="width: 100px;"  type="text" v-model="filters['Enivronment']" class="p-column-filter" placeholder="Enivronment" />
+                    <InputText  style="width: 100px;"  type="text" v-model="filters['package']" class="p-column-filter" placeholder="Package" />
                 </template>
                 <template #loading>
                   <span class="loading-text"></span>
               </template>
               <template #body="slotProps">
-                  {{slotProps.data.Enivronment}}
+                  {{slotProps.data.package.name}}
               </template>
             </Column>
-            <Column field="State" header="State" :sortable="true" filterMatchMode="myOwnEquals">
+            <Column field="status" header="Status" :sortable="true" filterMatchMode="myOwnEquals">
                 <template #filter>
-                    <InputText  style="width: 100px;"  type="text" v-model="filters['State']" class="p-column-filter" placeholder="State" />
+                    <InputText  style="width: 100px;"  type="text" v-model="filters['status']" class="p-column-filter" placeholder="Status" />
                 </template>
                 <template #loading>
                   <span class="loading-text"></span>
               </template>
               <template #body="slotProps">
-                  {{slotProps.data.State}}
+                  {{  slotProps.data.status.name }}
               </template>
             </Column>
-            <Column field="Started" header="Started" :sortable="true" filterMatchMode="myOwnEquals">
+            <Column field="startedOn" header="Last Run" :sortable="true" filterMatchMode="myOwnEquals">
                 <template #filter>
-                    <InputText  style="width: 100px;"  type="text" v-model="filters['Started']" class="p-column-filter" placeholder="Started" />
+                    <InputText  style="width: 100px;"  type="text" v-model="filters['startedOn']" class="p-column-filter" placeholder="Last Run" />
                 </template>
                 <template #loading>
                   <span class="loading-text"></span>
               </template>
               <template #body="slotProps">
-                  {{slotProps.data.Started}}
+                  {{  slotProps.data.status.startedOn }}
               </template>
             </Column>
-            <Column field="Ended" header="Ended" :sortable="true" filterMatchMode="myOwnEquals">
+            <Column field="action" header="Action" :sortable="true" filterMatchMode="myOwnEquals">
                 <template #filter>
-                    <InputText  style="width: 100px;"  type="text" v-model="filters['Ended']" class="p-column-filter" placeholder="Ended" />
+                    <InputText  style="width: 100px;"  type="text" v-model="filters['action']" class="p-column-filter" placeholder="Action" />
                 </template>
                 <template #loading>
                   <span class="loading-text"></span>
               </template>
-              <template #body="slotProps">
-                  {{slotProps.data.Ended}}
-              </template>
-            </Column>
-            <Column field="Source" header="Source" :sortable="true" filterMatchMode="myOwnEquals">
-                <template #filter>
-                    <InputText  style="width: 100px;"  type="text" v-model="filters['Source']" class="p-column-filter" placeholder="Source" />
-                </template>
-                <template #loading>
-                  <span class="loading-text"></span>
-              </template>
-              <template #body="slotProps">
-                  {{slotProps.data.Source}}
-              </template>
+            <template #body="slotProps">
+                <Button type="button" label="RUN" icon="pi pi-pencil" aria-placeholder="Link" class="p-button-warning">{{slotProps.data.action}}</Button>
+            </template>
             </Column>
             <template #footer>
                 In total there are {{jobs ? jobs.length : 0 }} jobs.
@@ -152,19 +143,18 @@ export default {
     },
     created() {
       this.columns = [
-            {field: 'Process', header: 'Process'},
-            {field: 'Robot', header: 'Robot'},
-            {field: 'Enivronment', header: 'Enivronment'},
-            {field: 'State', header: 'State'},
-            {field: 'Started', header: 'Started'},
-            {field: 'Ended', header: 'Ended'},
-            {field: 'Source', header: 'Source'}
+            {field: 'id', type: Int32Array, header: 'Id'},
+            {field: 'name', type: String, header: 'Name'},
+            {field: 'machine', type: String, header: 'Machine'},
+            {field: 'package', type: String, header: 'Package'},
+            {field: 'status', type: String, header: 'Status'},
+            {field: 'startedOn', type: Date, header: 'Last Run'}
         ];
         this.jobService = new JobService();
     },
     mounted() {
         this.loading = true;
-        this.jobs =  this.jobService.getJobs();
+        this.jobs =  this.jobService.getJobs().data;
         this.loading = false;
     },
     methods: {
@@ -194,11 +184,11 @@ export default {
             this.$refs.cm.show(event.originalEvent);
         },
         viewJob(job) {
-            this.$toast.add({severity: 'info', summary: 'Job Selected', detail: job.Process + ' - ' + job.Enivronment});
+            this.$toast.add({severity: 'info', summary: 'Job Selected', detail: job.name + ' - ' + job.machine});
         },
         deleteJob(job) {
             this.jobs = this.jobs.filter((c) => c.vin !== job.vin);
-            this.$toast.add({severity: 'info', summary: 'Job Deleted', detail: job.Process + ' - ' + job.Enivronment});
+            this.$toast.add({severity: 'info', summary: 'Job Deleted', detail: job.name + ' - ' + job.machine});
             this.selectedJob = null;
         }
     }

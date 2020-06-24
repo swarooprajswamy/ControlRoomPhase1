@@ -58,15 +58,17 @@
           width: 40px;
           display: inline-block;
           height: 40px;
-          margin-left: 0px;
-          margin-right: 10px;
-          background: white;
-          border-radius: 40px;
+          margin-left: 0;
+          margin-right: 15px;
+          background: #fff;
+          border-radius: 32px;
           text-align: center;
-
-        img{
+          img {
             max-width: 21px;
-        }
+          }
+          &.logo-img-rtl {
+            margin-right: 0;
+          }
       }
     }
   }
