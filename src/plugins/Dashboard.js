@@ -13,6 +13,9 @@ import PrimeVueDialog from 'primevue/dialog';
 import PrimeVueButton from 'primevue/button';
 import PrimeVueContextMenu from 'primevue/contextmenu';
 
+// Imported from NPM
+import vClickOutside from 'v-click-outside';
+import Vuelidate from 'vuelidate';
 
 import "es6-promise/auto";
 
@@ -34,6 +37,8 @@ export default  {
     install(Vue){
         Vue.use(Sidebar);
         Vue.use(GlobalComponents);
+        Vue.use(vClickOutside);
+        Vue.use(Vuelidate);
         Vue.component('DataTable',PrimeVueDataTable);
         Vue.component('Column',PrimeVueColumn);
         Vue.component('InputText',PrimeVueInputText);

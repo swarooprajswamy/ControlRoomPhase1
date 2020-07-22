@@ -1085,9 +1085,9 @@
   box-shadow: 0 0 0 0.1rem #212121;
 }
 .p-button:enabled:active {
-  background: #005b9f;
+  background: #FFB300;
   color: #ffffff;
-  border-color: #005b9f;
+  border-color: #FFB300;
 }
 .p-button .p-button-icon-left {
   margin-right: 0.5rem;
@@ -1185,9 +1185,9 @@
   box-shadow: 0 0 0 0.1rem #212121;
 }
 .p-button.p-button-info:enabled:active, .p-buttonset.p-button-info > .p-button:enabled:active, .p-splitbutton.p-button-info > .p-button:enabled:active {
-  background: #005b9f;
+  background: #FFB300;
   color: #ffffff;
-  border-color: #005b9f;
+  border-color: #FFB300;
 }
 
 .p-button.p-button-success, .p-buttonset.p-button-success > .p-button, .p-splitbutton.p-button-success > .p-button {
@@ -1450,9 +1450,11 @@
 }
 .p-datatable.p-datatable-sm .p-datatable-thead > tr > th {
   padding: 0.48535rem 0.72845rem;
+  overflow: hidden;
 }
 .p-datatable.p-datatable-sm .p-datatable-tbody > tr > td {
   padding: 0.48535rem 0.72845rem;
+  overflow: hidden;
 }
 .p-datatable.p-datatable-sm .p-datatable-tfoot > tr > td {
   padding: 0.48535rem 0.85rem;
@@ -2047,9 +2049,11 @@
 }
 .p-treetable.p-treetable-sm .p-treetable-thead > tr > th {
   padding: 0.48535rem 0.72845rem;
+  overflow: hidden;
 }
 .p-treetable.p-treetable-sm .p-treetable-tbody > tr > td {
   padding: 0.48535rem 0.72845rem;
+  overflow: hidden;
 }
 .p-treetable.p-treetable-sm .p-treetable-tfoot > tr > td {
   padding: 0.48535rem 0.85rem;
@@ -3656,3 +3660,18 @@
 }
 
 /* Customizations to the designer theme should be defined here */
+
+
+.invalid input {
+  border: 1px solid red !important;
+  /* background-color: #ffc9aa; */
+}
+
+.invalid span, .validationmessage {
+  color: red;
+}
+
+.validationmessage {
+  color: red;
+  font-size: 12px !important;
+}

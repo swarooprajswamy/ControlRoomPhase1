@@ -36,14 +36,14 @@ export default {
         },
         title: String,
         icon: String,
-        titleClasses: [String, Object, Array]
+        titleClasses: [String, Object, Array],
     },
     methods: {
         toggleDropdown() {
             this.isOpen = !this.isOpen;
         },
         closeDropdown(){
-            this.isOpen = !this.isOpen;
+            this.isOpen = false;
         }
     }
 }

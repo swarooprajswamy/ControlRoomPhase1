@@ -18,7 +18,9 @@
     "v-click-outside": "^3.0.1",
     "vue": "^2.6.11",
     "vue-clickaway": "^2.2.2",
-    "vue-router": "^3.3.2"
+    "vue-router": "^3.3.2",
+    "vue2-transitions": "^0.3.0",
+    "vuelidate": "^0.7.5"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.4.0",

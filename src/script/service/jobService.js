@@ -1,11 +1,11 @@
 import axios from 'axios'
 
 const jobsInstance = axios.create({
-    baseURL: 'https://vuejshttp-ef355.firebaseio.com'
+    baseURL: 'https://rf-controlroom.azurewebsites.net/'
 });
 
 jobsInstance.defaults.headers.common['CustomPostHeaders'] = 'Custom Post header';
-
+jobsInstance.defaults.headers.common['Authorization'] = 'Token 7cbb8c5cb7385671e03c8d75b9ba137ffd973bfe';
 
 
 export default class Jobs {
@@ -14,7 +14,7 @@ export default class Jobs {
     }
 	getJobs() {
         // const jobs = [];
-        // jobsInstance.get('/Jobs.json')
+        // jobsInstance.get('/job/api')
         // .then(success => {
         //     const res = success.data
         //     let job = [];

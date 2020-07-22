@@ -1,8 +1,8 @@
 <template>
+    <div class="container-fluid d-flex flex-wrap justify-content-between">
   <footer class="footer">
     <br>
     <br>
-    <div class="container-fluid d-flex flex-wrap justify-content-between">
       <!-- <nav>
         <ul>
           <li>
@@ -10,13 +10,11 @@
           </li>
         </ul>
       </nav> -->
-      <div class="right copyright d-flex flex-wrap">
-        &copy; Coded by 
-        <a href="https://github.com/VUE-Poc/BotOrchestration" target="_blank"> &nbsp; Team Secure PMS </a>&nbsp;
-        Designed by &nbsp;<a href="https://www.evry.in/" target="_blank"> &nbsp; Evry India.</a>
+      <div class="right copyright">
+        &copy; Designed by &nbsp;<a href="https://www.evry.in/" target="_blank"> &nbsp; Evry India.</a>
       </div>
-    </div>
   </footer>
+    </div>
 </template>
 <script>
 export default {
