@@ -9,11 +9,9 @@
           :paginator="true"
           :rows="10"
           :first="firstRecordIndex"
-          :multiSortMeta="multiSortMeta"
           :filters.sync="filters" 
           :scrollable="true" 
           scrollHeight="flex"
-          @row-reorder="onRowReorder"
           ref="dt"
            selectionMode="single" dataKey="vin"
           contextMenu :contextMenuSelection.sync="selectedSchedule" 
@@ -57,7 +55,7 @@
                                     <div class="col-lg-12 col-md-12">
                                         <div class="card">
                                             <div class="header">
-                                                <h4 class="title">Edit Schedule
+                                                <h4 class="title">Add Schedule
                                                     <button type="button"
                                                             class="close"
                                                             v-if="showClose"
@@ -99,7 +97,9 @@
                                                                 name="name" 
                                                                 placeholder="Schedule Enivronment" 
                                                                 class="form-control border-input" 
-                                                                required="" id="id_enivronment"> 
+                                                                id="id_enivronment"
+                                                                v-model="enivronment"
+                                                                > 
                                                             </div>
                                                         </div>
                                                     </div> 
@@ -124,7 +124,6 @@
                     </div>
                 </div>
             </template>
-            <ContextMenu :model="menuModel" ref="cm" />
             <Column field="Name" header="Name" :sortable="true">
               <template #body="slotProps">
                   {{slotProps.data.Name}}
@@ -166,24 +165,18 @@ export default {
     data() {
         return {
             name: '',
-
+            enivronment: '',
+            nextRunTime: '',
+            process: '',
+            stopAfter: '',
 
             columns: null,
             schedules: null,
             firstRecordIndex: 0,
-            multiSortMeta: [
-            // {field: 'year', order: 1},
-            // {field: 'brand', order: -1},
-            // {field: 'color', order: 1}
-            ],
             filters: {},
             dialogVisible: false,
             scheduleService: null,
             selectedSchedule: null,
-            menuModel: [
-                {label: 'View', icon: 'pi pi-fw pi-search', command: () => this.viewSchedule(this.selectedSchedule)},
-                {label: 'Delete', icon: 'pi pi-fw pi-times', command: () => this.deleteSchedule(this.selectedSchedule)}
-            ],
             addModalVisible: false
         }
     },
@@ -215,44 +208,25 @@ export default {
         this.loading = false;
     },
     methods: {
-      myOwnEquals(value, filter) {
-          if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
-              return true;
-          }
-
-          if (value === undefined || value === null) {
-              return false;
-          }
-
-          return value.toString().toLowerCase() === filter.toString().toLowerCase();
-      },
-      openDialog() {
+        openDialog() {
         if(!this.dialogVisible){ this.dialogVisible = true; } else { this.dialogVisible = false; }
-      },
-      onRowReorder(event) {
-            //update new order
-            this.schedules = event.value;
         },
         exportCSV() {
             this.$refs.dt.exportCSV();
-        },
-        
-        onRowContextMenu(event) {
-            this.$refs.cm.show(event.originalEvent);
-        },
-        viewSchedule(schedule) {
-            this.$toast.add({severity: 'info', summary: 'Schedule Selected', detail: schedule.Process + ' - ' + schedule.Enivronment});
-        },
-        deleteSchedule(schedule) {
-            this.schedules = this.schedules.filter((c) => c.vin !== schedule.vin);
-            this.$toast.add({severity: 'info', summary: 'Schedule Deleted', detail: schedule.Process + ' - ' + schedule.Enivronment});
-            this.selectedSchedule = null;
         },
         closeModal() {
         this.addModalVisible  = false;
         },
         onSave(){
-            console.log('Completed');
+            const formData = {
+                name: this.name,
+                enivronment: this.enivronment,
+                nextRunTime: this.nextRunTime,
+                process: this.process,
+                stopAfter: this.stopAfter
+                }
+            this.scheduleService.onSave(formData);
+            this.closeModal();
         }
     }
 }

@@ -50,7 +50,7 @@ export default {
         type: String,
         default: ""
         },
-        simple: Boolean
+        simple: Boolean,
     }
 }
 </script>

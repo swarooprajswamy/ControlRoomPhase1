@@ -10,11 +10,12 @@ body {
 }
 
 a {
-  color: $info-color;
+  color: $anchorTag-color;
 
   &:hover, &:focus {
-    color: $info-states-color;
+    color: $anchorTag-color;
     text-decoration: none;
+    cursor: pointer;
   }
 }
 

@@ -9,11 +9,9 @@
           :paginator="true"
           :rows="10"
           :first="firstRecordIndex"
-          :multiSortMeta="multiSortMeta"
           :filters.sync="filters" 
           :scrollable="true" 
           scrollHeight="flex"
-          @row-reorder="onRowReorder"
           ref="dt"
           selectionMode="single" 
           dataKey="vin"
@@ -58,7 +56,7 @@
                                     <div class="col-lg-12 col-md-12">
                                         <div class="card">
                                             <div class="header">
-                                                <h4 class="title">Edit Jobs
+                                                <h4 class="title">Add Job
                                                     <button type="button"
                                                             class="close"
                                                             v-if="showClose"
@@ -76,7 +74,7 @@
                                                         <!-- {{$v.name}} -->
                                                         <div class="form-group" :class="{invalid: $v.name.$error}"> 
                                                             <label for="id_name" 
-                                                            class="requiredField"> Jobs Name
+                                                            class="requiredField"> Job Name
                                                             <span class="asteriskField">*</span> 
                                                             </label> 
                                                             <input 
@@ -84,7 +82,7 @@
                                                             name="name" 
                                                             placeholder="Job Name" 
                                                             class="form-control border-input" 
-                                                            id="id_name"
+                                                            id="id_jobname"
                                                             v-model="name"
                                                             @blur="$v.name.$touch()"
                                                             > 
@@ -103,7 +101,9 @@
                                                                 name="name" 
                                                                 placeholder="Machine Name" 
                                                                 class="form-control border-input" 
-                                                                required="" id="id_name"> 
+                                                                id="id_machinename"
+                                                                v-model="machine"
+                                                                > 
                                                         </div>
                                                     </div>
                                                     </div> 
@@ -116,7 +116,9 @@
                                                                 name="name" 
                                                                 placeholder="Package Name" 
                                                                 class="form-control border-input" 
-                                                                required="" id="id_name"> 
+                                                                id="id_name"
+                                                                v-model="packages"
+                                                                > 
                                                             </div>
                                                         </div>
                                                     </div> 
@@ -141,7 +143,6 @@
                     </div>
                 </div>
             </template>
-            <ContextMenu :model="menuModel" ref="cm" />
             <Column field="name" header="Name" :sortable="true">
               <template #body="slotProps">
                   {{slotProps.data.name}}
@@ -164,16 +165,16 @@
             </Column>
             <Column field="startedOn" header="Last Run" :sortable="true">
               <template #body="slotProps">
-                  {{  slotProps.data.status ? slotProps.data.status.startedOn : "" }}
+                  {{  slotProps.data.startedOn }}
               </template>
             </Column>
-            <Column field="action" header="Action" :sortable="true">
+            <Column field="action" header="Action">
             <template #body="slotProps">
-                <Button 
-                type="button" 
-                label="RUN" 
-                aria-placeholder="Link" 
-                class="p-button-link">{{slotProps.data.action}}</Button>
+                <a 
+                href="#"
+                class="p-button-link"
+                @click="onRunJob(botcontrolURL+slotProps.data.id+'/start')"
+                >RUN</a>
             </template>
             </Column>
             <template #footer>
@@ -192,27 +193,21 @@ import { required, minLength } from 'vuelidate/lib/validators';
 export default {
     data() {
         return {
+            id: 0,
             name: '',
-
-
-
+            machine: '',
+            packages: '',
+            status: '',
+            startedOn: '',
+            botcontrolURL: 'https://rf-controlroom.azurewebsites.net/job/',
 
             columns: null,
             jobs: null,
             firstRecordIndex: 0,
-            multiSortMeta: [
-            // {field: 'year', order: 1},
-            // {field: 'brand', order: -1},
-            // {field: 'color', order: 1}
-            ],
             filters: {},
             dialogVisible: false,
             jobService: null,
             selectedJob: null,
-            menuModel: [
-                {label: 'View', icon: 'pi pi-fw pi-search', command: () => this.viewJob(this.selectedJob)},
-                {label: 'Delete', icon: 'pi pi-fw pi-times', command: () => this.deleteJob(this.selectedJob)}
-            ],
             addModalVisible: false
         }
     },
@@ -241,48 +236,33 @@ export default {
     },
     mounted() {
         this.loading = true;
-        this.jobs =  this.jobService.getJobs().data;
+        this.jobs =  this.jobService.getJobs();
         this.loading = false;
     },
     methods: {
-      myOwnEquals(value, filter) {
-          if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
-              return true;
-          }
-
-          if (value === undefined || value === null) {
-              return false;
-          }
-
-          return value.toString().toLowerCase() === filter.toString().toLowerCase();
-      },
       openDialog() {
         if(!this.dialogVisible){ this.dialogVisible = true; } else { this.dialogVisible = false; }
       },
-      onRowReorder(event) {
-            //update new order
-            this.jobs = event.value;
-        },
         exportCSV() {
             this.$refs.dt.exportCSV();
-        },
-        
-        onRowContextMenu(event) {
-            this.$refs.cm.show(event.originalEvent);
-        },
-        viewJob(job) {
-            this.$toast.add({severity: 'info', summary: 'Job Selected', detail: job.name + ' - ' + job.machine});
-        },
-        deleteJob(job) {
-            this.jobs = this.jobs.filter((c) => c.vin !== job.vin);
-            this.$toast.add({severity: 'info', summary: 'Job Deleted', detail: job.name + ' - ' + job.machine});
-            this.selectedJob = null;
         },
         closeModal() {
         this.addModalVisible  = false;
         },
         onSave(){
-            console.log('Completed');
+            const formData = {
+                id: this.id,
+                name: this.name,
+                machine: this.machine,
+                package: this.packages,
+                status: this.status,
+                startedOn: this.startedOn
+                }
+            this.jobService.onSave(formData);
+            this.closeModal();
+        },
+        onRunJob(url) {
+            this.jobService.onRunJob(url);
         }
     }
 }

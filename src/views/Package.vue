@@ -12,7 +12,6 @@
           :multiSortMeta="multiSortMeta"
           :filters.sync="filters" 
           :scrollable="true" scrollHeight="flex"
-          @row-reorder="onRowReorder"
           ref="dt"
           selectionMode="single" dataKey="vin"
           contextMenu :contextMenuSelection.sync="selectedPackage" 
@@ -55,7 +54,7 @@
                                     <div class="col-lg-12 col-md-12">
                                         <div class="card">
                                             <div class="header">
-                                                <h4 class="title">Edit Package
+                                                <h4 class="title">Add Package
                                                     
                                                     <button type="button"
                                                             class="close"
@@ -100,7 +99,9 @@
                                                                 rows="5" 
                                                                 placeholder="Description" 
                                                                 class="textarea form-control border-input" 
-                                                                id="id_description"></textarea> 
+                                                                id="id_description"
+                                                                v-model="description"
+                                                                ></textarea> 
                                                             </div>
                                                         </div>
                                                     </div> 
@@ -111,7 +112,7 @@
                                                                 label="Save" 
                                                                 style="margin: 0px 4px 0px 0px;" 
                                                                 @click="onSave"
-                                                                :disabled="$v.$invalid"
+                                                                :disabled="$v.name.$invalid"
                                                                 > </Button>  
                                                             </div>
                                                         </div>
@@ -204,7 +205,6 @@
                     </div>
                 </div>
             </template>
-            <ContextMenu :model="menuModel" ref="cm" />
             <Column field="name" header="Name" :sortable="true">
               <template #body="slotProps">
                   {{slotProps.data.name}}
@@ -227,21 +227,17 @@
             </Column>
             <Column field="action" header="Action">
             <template #body="slotProps">
-                <Button 
-                type="button" 
-                label="UPLOAD" 
-                aria-placeholder="Link" 
+                <a 
+                href="#"
+                class="p-button-link"
                 @click="uploadFileModalVisible = true" 
-                class="p-button-link" 
                 id="uploadFileModalVisible-button" 
-                data-toggle="modal"
-                >{{slotProps.data.action}}</Button>
+                >UPLOAD</a>
                 |
-                <Button 
-                type="button" 
-                label="File" 
-                aria-placeholder="Link" 
-                class="p-button-link">{{slotProps.data.action}}</Button>
+                <a 
+                class="p-button-link"
+                v-bind:href="slotProps.data.packageFile"
+                >File</a>
             </template>
             </Column>
             <template #footer>
@@ -262,6 +258,9 @@ export default {
         return {
             name: '',
             filename: '',
+            description: '',
+            version: '',
+            packageFile: '',
 
 
             columns: null,
@@ -276,10 +275,6 @@ export default {
             dialogVisible: false,
             packageService: null,
             selectedPackage: null,
-            menuModel: [
-                {label: 'View', icon: 'pi pi-fw pi-search', command: () => this.viewPackage(this.selectedPackage)},
-                {label: 'Delete', icon: 'pi pi-fw pi-times', command: () => this.deletePackage(this.selectedPackage)}
-            ],
             addModalVisible: false,
             uploadFileModalVisible: false
         }
@@ -310,49 +305,36 @@ export default {
     },
     mounted() {
         this.loading = true;
-        this.packages =  this.packageService.getPackage().data;
+        this.packages =  this.packageService.getPackage();
         this.loading = false;
     },
     methods: {
-      myOwnEquals(value, filter) {
-          if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
-              return true;
-          }
-
-          if (value === undefined || value === null) {
-              return false;
-          }
-
-          return value.toString().toLowerCase() === filter.toString().toLowerCase();
-      },
-      openDialog() {
+        openDialog() {
         if(!this.dialogVisible){ this.dialogVisible = true; } else { this.dialogVisible = false; }
-      },
-      onRowReorder(event) {
-            //update new order
-            this.packages = event.value;
         },
         exportCSV() {
             this.$refs.dt.exportCSV();
-        },
-        
-        onRowContextMenu(event) {
-            this.$refs.cm.show(event.originalEvent);
-        },
-        viewPackage(obj) {
-            this.$toast.add({severity: 'info', summary: 'Package Selected', detail: obj.name + ' - ' + obj.version});
-        },
-        deletePackage(obj) {
-            this.packages = this.packages.filter((c) => c.vin !== obj.vin);
-            this.$toast.add({severity: 'info', summary: 'Package Deleted', detail: obj.name + ' - ' + obj.version});
-            this.selectedPackage = null;
         },
         closeModal() {
         this.addModalVisible  = false;
         this.uploadFileModalVisible  = false;
         },
         onSave(){
-            console.log('Completed');
+            const formData = {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+                version: this.version,
+                packageFile: this.packageFile
+                }
+            this.packageService.onSave(formData);
+            this.packages =  this.packageService.getPackage();
+            this.id = 0;
+            this.name = '';
+            this.description = '';
+            this.version = '';
+            this.packageFile = '';
+            this.closeModal();
         }
     }
 }

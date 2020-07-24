@@ -9,10 +9,8 @@
           :paginator="true"
           :rows="10"
           :first="firstRecordIndex"
-          :multiSortMeta="multiSortMeta"
           :filters.sync="filters" 
           :scrollable="true" scrollHeight="flex"
-          @row-reorder="onRowReorder"
           ref="dt"
           selectionMode="single" 
           dataKey="vin"
@@ -57,7 +55,7 @@
                                     <div class="col-lg-12 col-md-12">
                                         <div class="card">
                                             <div class="header">
-                                                <h4 class="title">Edit Machine
+                                                <h4 class="title">Add Machine
                                                     <button type="button"
                                                             class="close"
                                                             v-if="showClose"
@@ -102,7 +100,9 @@
                                                                 rows="5" 
                                                                 placeholder="Description" 
                                                                 class="textarea form-control border-input" 
-                                                                id="id_description"></textarea> 
+                                                                id="id_description"
+                                                                v-model="description"
+                                                                ></textarea> 
                                                             </div>
                                                         </div>
                                                     </div> 
@@ -117,7 +117,9 @@
                                                                     readonly="True" 
                                                                     value="Will generate automatically" 
                                                                     class="textinput textInput form-control" 
-                                                                    id="id_machineKey"> 
+                                                                    id="id_machineKey"
+                                                                    v-model="machineKey"
+                                                                    > 
                                                             </div>
                                                         </div>
                                                     </div>
@@ -142,7 +144,6 @@
                     </div>
                 </div>
             </template>
-            <ContextMenu :model="menuModel" ref="cm" />
             <Column field="name" header="Name" :sortable="true">
               <template #body="slotProps">
                   {{slotProps.data.name}}
@@ -184,25 +185,18 @@ export default {
     data() {
         return {
             name: '',
-
-
+            description: '',
+            machineKey: '',
+            lastAvailable: '',
+            status: '',
 
             columns: null,
             machines: null,
             firstRecordIndex: 0,
-            multiSortMeta: [
-            // {field: 'year', order: 1},
-            // {field: 'brand', order: -1},
-            // {field: 'color', order: 1}
-            ],
             filters: {},
             dialogVisible: false,
             machineService: null,
             selectedMachine: null,
-            menuModel: [
-                {label: 'View', icon: 'pi pi-fw pi-search', command: () => this.viewMachine(this.selectedMachine)},
-                {label: 'Delete', icon: 'pi pi-fw pi-times', command: () => this.deleteMachine(this.selectedMachine)}
-            ],
             addModalVisible: false
         }
     },
@@ -230,48 +224,37 @@ export default {
     },
     mounted() {
         this.loading = true;
-        this.machines =  this.machineService.getMachine().data;
+        this.machines =  this.machineService.getMachine();
         this.loading = false;
     },
     methods: {
-      myOwnEquals(value, filter) {
-          if (filter === undefined || filter === null || (typeof filter === 'string' && filter.trim() === '')) {
-              return true;
-          }
-
-          if (value === undefined || value === null) {
-              return false;
-          }
-
-          return value.toString().toLowerCase() === filter.toString().toLowerCase();
-      },
-      openDialog() {
+        openDialog() {
         if(!this.dialogVisible){ this.dialogVisible = true; } else { this.dialogVisible = false; }
-      },
-      onRowReorder(event) {
-            //update new order
-            this.machines = event.value;
         },
         exportCSV() {
             this.$refs.dt.exportCSV();
-        },
-        
-        onRowContextMenu(event) {
-            this.$refs.cm.show(event.originalEvent);
-        },
-        viewMachine(machine) {
-            this.$toast.add({severity: 'info', summary: 'Machine Selected', detail: machine.Process + ' - ' + machine.Enivronment});
-        },
-        deleteMachine(machine) {
-            this.machines = this.machines.filter((c) => c.vin !== machine.vin);
-            this.$toast.add({severity: 'info', summary: 'Machine Deleted', detail: machine.Process + ' - ' + machine.Enivronment});
-            this.selectedMachine = null;
         },
         closeModal() {
         this.addModalVisible  = false;
         },
         onSave(){
-            console.log('Completed');
+            const formData = {
+                id: this.id,
+                name: this.name,
+                description: this.description,
+                machineKey: this.machineService.getGUID(),
+                lastAvailable: this.lastAvailable,
+                status: this.status
+                }
+            this.machineService.onSave(formData);
+            this.machines =  this.machineService.getMachine();
+            this.id = 0;
+            this.name = '';
+            this.description = '';
+            this.machineKey = '';
+            this.lastAvailable = '';
+            this.status = '';
+            this.closeModal();
         }
     }
 }
