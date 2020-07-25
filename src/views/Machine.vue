@@ -221,6 +221,7 @@ export default {
             {field: 'status', header: 'Status'},
         ];
         this.machineService = new MachineService();
+        this.machineKey = this.machineService.getGUID();
     },
     mounted() {
         this.loading = true;
@@ -242,18 +243,18 @@ export default {
                 id: this.id,
                 name: this.name,
                 description: this.description,
-                machineKey: this.machineService.getGUID(),
+                machineKey: this.machineKey,
                 lastAvailable: this.lastAvailable,
                 status: this.status
                 }
             this.machineService.onSave(formData);
-            this.machines =  this.machineService.getMachine();
             this.id = 0;
             this.name = '';
             this.description = '';
             this.machineKey = '';
             this.lastAvailable = '';
             this.status = '';
+            this.machines =  this.machineService.getMachine();
             this.closeModal();
         }
     }

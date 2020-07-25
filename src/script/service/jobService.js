@@ -112,12 +112,59 @@ export default class Jobs {
     //     ]
     // }
     }
-    
+
+    getMachine() {
+        const machines = [];
+        jobsInstance.get('/machine/api')
+        .then(success => {
+            const res = success.data;
+            let machine = [];
+            for (const key in res) {
+              if (Object.prototype.hasOwnProperty.call(res, key)) {
+                machine.id = key;
+                machine.name = res[key].name;
+                machines.push(machine);
+                machine = {};
+              }
+            }
+          }
+        )
+        .catch(error => console.log(error));
+        let machine = [];
+        machine.id = 0;
+        machine.name = "------------------";
+        machines.push(machine);
+        return machines;    
+    }
+
+    getPackage() {
+        const packages = [];
+        jobsInstance.get('/package/api')
+        .then(success => {
+            let packageq = [];
+            const res = success.data;
+            for (const key in res) {
+                    if (Object.prototype.hasOwnProperty.call(res, key)) {
+                    packageq.id = key;
+                    packageq.name = res[key].name;
+                    packages.push(packageq);
+                    packageq = {};
+                    }
+                }
+            }
+        )
+        .catch(error => console.log(error));
+        let packageq = [];
+        packageq.id = 0;
+        packageq.name = "------------------";
+        packages.push(packageq);
+        return packages;    
+    }    
+        
     onSave(job){
-        jobsInstance.post('job/new/', job)
+        jobsInstance.post('job/api/', job)
         .then(success => { console.log(success); })
         .catch(error => console.log(error));
-        console.log(job);
     }
 
     onRunJob(url) {

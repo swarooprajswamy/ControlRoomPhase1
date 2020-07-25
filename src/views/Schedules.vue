@@ -226,6 +226,12 @@ export default {
                 stopAfter: this.stopAfter
                 }
             this.scheduleService.onSave(formData);
+            this.name = '';
+            this.enivronmente = '';
+            this.nextRunTimee = '';
+            this.processe = '';
+            this.stopAftere = '';
+            this.schedules =  this.scheduleService.getSchedules();
             this.closeModal();
         }
     }

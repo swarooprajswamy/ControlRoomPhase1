@@ -23,7 +23,7 @@ export default class Machine {
                 machine.id = key;
                 machine.name = res[key].name;
                 machine.description = res[key].description;
-                machine.machinekey = res[key].machinekey;
+                machine.machineKey = res[key].machineKey;
                 machine.lastAvailable = res[key].lastAvailable;
                 machine.status = res[key].status;
                 machines.push(machine);
@@ -90,10 +90,9 @@ export default class Machine {
     }
     
     onSave(machine){
-        machinesInstance.post('machine/new/', machine)
+        machinesInstance.post('machine/api/', machine)
         .then(success => { console.log(success); })
         .catch(error => console.log(error));
-        console.log(machine);
     }
 
     getGUID() {

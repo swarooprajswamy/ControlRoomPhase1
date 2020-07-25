@@ -35,9 +35,8 @@ export default class Schedules {
     }
     
     onSave(schedule){
-      schedulesInstance.post('schedule/new/', schedule)
+      schedulesInstance.post('schedule/api/', schedule)
       .then(success => { console.log(success); })
       .catch(error => console.log(error));
-      console.log(schedule);
   }
 }

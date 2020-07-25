@@ -96,14 +96,29 @@
                                                     <div class="col-md-12">
                                                         <div class="form-group"> 
                                                             <label for="id_machine" class=""> Machine </label> 
-                                                            <input 
+                                                            <!-- <input 
                                                                 type="text" 
                                                                 name="name" 
                                                                 placeholder="Machine Name" 
                                                                 class="form-control border-input" 
                                                                 id="id_machinename"
-                                                                v-model="machine"
-                                                                > 
+                                                                v-model="machine_id"
+                                                                >  -->
+                                                                <select type="text" 
+                                                                name="name" 
+                                                                placeholder="Package Name" 
+                                                                class="form-control border-input" 
+                                                                id="id_name"
+                                                                v-model="machine_id"
+                                                                >
+                                                                    <option slot="options"
+                                                                    v-for="machin in machineList" 
+                                                                    v-bind:key="machin.id"
+                                                                    v-bind:value="machin.id"
+                                                                    class="dropdown-item">
+                                                                        {{ machin.name }}
+                                                                    </option>
+                                                                </select>
                                                         </div>
                                                     </div>
                                                     </div> 
@@ -111,14 +126,30 @@
                                                         <div class="col-md-12">
                                                             <div class="form-group"> 
                                                                 <label for="id_package" class=""> Package </label> 
-                                                                <input 
+                                                                <!-- <input 
                                                                 type="text" 
                                                                 name="name" 
                                                                 placeholder="Package Name" 
                                                                 class="form-control border-input" 
                                                                 id="id_name"
-                                                                v-model="packages"
-                                                                > 
+                                                                v-model="package_id"
+                                                                >  -->
+                                                                
+                                                                <select type="text" 
+                                                                name="name" 
+                                                                placeholder="Package Name" 
+                                                                class="form-control border-input" 
+                                                                id="id_name"
+                                                                v-model="package_id"
+                                                                >
+                                                                    <option slot="options"
+                                                                    v-for="packageq in packageList" 
+                                                                    v-bind:key="packageq.id"
+                                                                    v-bind:value="packageq.id"
+                                                                    class="dropdown-item">
+                                                                        {{ packageq.name }}
+                                                                    </option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                     </div> 
@@ -195,11 +226,14 @@ export default {
         return {
             id: 0,
             name: '',
-            machine: '',
-            packages: '',
+            machine_id: 0,
+            package_id: 0,
             status: '',
             startedOn: '',
             botcontrolURL: 'https://rf-controlroom.azurewebsites.net/job/',
+
+            machineList: null,
+            packageList: null,
 
             columns: null,
             jobs: null,
@@ -237,6 +271,8 @@ export default {
     mounted() {
         this.loading = true;
         this.jobs =  this.jobService.getJobs();
+        this.machineList = this.jobService.getMachine();
+        this.packageList = this.jobService.getPackage();
         this.loading = false;
     },
     methods: {
@@ -251,14 +287,20 @@ export default {
         },
         onSave(){
             const formData = {
-                id: this.id,
+                // id: this.id,
                 name: this.name,
-                machine: this.machine,
-                package: this.packages,
-                status: this.status,
-                startedOn: this.startedOn
+                machine_id: parseInt(this.machine_id),
+                package_id: parseInt(this.package_id),
+                // status: this.status,
+                // startedOn: this.startedOn
                 }
             this.jobService.onSave(formData);
+            this.name= '',
+            this.machine_id= 0,
+            this.package_id= 0,
+            this.status= '',
+            this.startedOn= '',
+            this.jobs =  this.jobService.getJobs();
             this.closeModal();
         },
         onRunJob(url) {

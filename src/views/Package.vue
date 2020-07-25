@@ -9,7 +9,6 @@
           :paginator="true"
           :rows="10"
           :first="firstRecordIndex"
-          :multiSortMeta="multiSortMeta"
           :filters.sync="filters" 
           :scrollable="true" scrollHeight="flex"
           ref="dt"
@@ -149,7 +148,9 @@
                                             <div class="content">
                                                     <div id="div_id_name" class="row"> 
                                                         <div class="col-md-12">
-                                                            <div class="form-group" :class="{invalid: $v.filename.$error}"> 
+                                                            <div class="form-group" 
+                                                            :class="{invalid: $v.filename.$error}"
+                                                            > 
                                                                 <label for="id_name" 
                                                                 class="requiredField"> Name
                                                                 <span class="asteriskField">*</span> 
@@ -189,7 +190,7 @@
                                                                 <Button 
                                                                     label="Save" 
                                                                     style="margin: 0px 4px 0px 0px;" 
-                                                                    @click="onSave"
+                                                                    @click="onUploadPackage"
                                                                     :disabled="$v.filename.$invalid"
                                                                     > </Button>   
                                                             </div>
@@ -256,6 +257,7 @@ import { required, minLength } from 'vuelidate/lib/validators';
 export default {
     data() {
         return {
+            packageid: 0,
             name: '',
             filename: '',
             description: '',
@@ -266,11 +268,6 @@ export default {
             columns: null,
             packages: null,
             firstRecordIndex: 0,
-            multiSortMeta: [
-            // {field: 'year', order: 1},
-            // {field: 'brand', order: -1},
-            // {field: 'color', order: 1}
-            ],
             filters: {},
             dialogVisible: false,
             packageService: null,
@@ -328,13 +325,20 @@ export default {
                 packageFile: this.packageFile
                 }
             this.packageService.onSave(formData);
-            this.packages =  this.packageService.getPackage();
             this.id = 0;
             this.name = '';
             this.description = '';
             this.version = '';
             this.packageFile = '';
+            this.packages =  this.packageService.getPackage();
             this.closeModal();
+        },
+        onUploadPackage(){
+            const formData = {
+                packageid: this.id,
+                packagefile: this.packageFile
+                }
+                console.log(formData);
         }
     }
 }
