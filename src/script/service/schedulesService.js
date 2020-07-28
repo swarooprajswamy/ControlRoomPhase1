@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const schedulesInstance = axios.create({
-    baseURL: 'https://vuejshttp-ef355.firebaseio.com'
+    baseURL: 'https://vuejshttp-ef355.firebaseio.com/'
 });
 
 schedulesInstance.defaults.headers.common['CustomPostHeaders'] = 'Custom Post header';
@@ -12,7 +12,7 @@ export default class Schedules {
 
     getSchedules() {
       const schedules = [];
-    schedulesInstance.get('/Schedules.json')
+    schedulesInstance.get('Schedules.json/')
           .then(success => {
               const res = success.data
               let schedule = [];

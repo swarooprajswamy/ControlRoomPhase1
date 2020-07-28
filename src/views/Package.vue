@@ -37,7 +37,7 @@
                         placeholder="Global Search" size="50" />
                         
                         <Button icon="ti-plus" 
-                        @click="addModalVisible = true" 
+                        @click="onAddRecord()" 
                         class="pi pi-external-link" id="addModalVisible-button" 
                         data-toggle="modal"
                          style="margin: 0px 0px 0px 4px;">
@@ -127,7 +127,7 @@
                         id="uploadFileModalVisible"
                         :centered="false"
                         :show-close="true">
-                            <form @submit.prevent="onSave">
+                            <form enctype="multipart/form-data" @submit.prevent="onUploadPackage">
                                 <div slot="content">
                                     <div class="col-lg-12 col-md-12">
                                         <div class="card">
@@ -148,12 +148,9 @@
                                             <div class="content">
                                                     <div id="div_id_name" class="row"> 
                                                         <div class="col-md-12">
-                                                            <div class="form-group" 
-                                                            :class="{invalid: $v.filename.$error}"
-                                                            > 
+                                                            <div class="form-group" > 
                                                                 <label for="id_name" 
                                                                 class="requiredField"> Name
-                                                                <span class="asteriskField">*</span> 
                                                                 </label> 
                                                                 <input 
                                                                 type="text" 
@@ -162,7 +159,7 @@
                                                                 class="form-control border-input" 
                                                                 id="id_filename"
                                                                 v-model="filename"
-                                                                @blur="$v.filename.$touch()"
+                                                                :disabled=true
                                                                 > 
                                                             </div>
                                                         </div>
@@ -176,10 +173,14 @@
                                                             <br>
                                                             <label>Chage:</label>
                                                             <input 
-                                                            type="file" 
-                                                            name="packageFile" 
-                                                            class="form-control-file" 
-                                                            id="id_packageFile"
+                                                                type="file" 
+                                                                name="packageFile" 
+                                                                class="form-control-file" 
+                                                                id="id_packageFile"
+                                                                ref="packageFile"
+                                                                :class="{ invalid: $v.packageFile.$error }" 
+                                                                accept=".zip, .robot"
+                                                                @change="handleFileUpload"
                                                             >
                                                             </div>
                                                         </div>
@@ -191,7 +192,7 @@
                                                                     label="Save" 
                                                                     style="margin: 0px 4px 0px 0px;" 
                                                                     @click="onUploadPackage"
-                                                                    :disabled="$v.filename.$invalid"
+                                                                    :disabled=" $v.packageFile.$invalid"
                                                                     > </Button>   
                                                             </div>
                                                         </div>
@@ -231,7 +232,7 @@
                 <a 
                 href="#"
                 class="p-button-link"
-                @click="uploadFileModalVisible = true" 
+                @click="onUploadFile(slotProps.data.id,slotProps.data.name)" 
                 id="uploadFileModalVisible-button" 
                 >UPLOAD</a>
                 |
@@ -287,7 +288,7 @@ export default {
             required,
             minLength: minLength(10)
         },
-        filename: {
+        packageFile: {
             required
         }
      },
@@ -313,6 +314,7 @@ export default {
             this.$refs.dt.exportCSV();
         },
         closeModal() {
+        this.clearFormValues();
         this.addModalVisible  = false;
         this.uploadFileModalVisible  = false;
         },
@@ -325,20 +327,39 @@ export default {
                 packageFile: this.packageFile
                 }
             this.packageService.onSave(formData);
+            this.packages =  this.packageService.getPackage();
+            this.closeModal();
+        },
+        clearFormValues(){
             this.id = 0;
             this.name = '';
             this.description = '';
             this.version = '';
             this.packageFile = '';
+        },
+        onAddRecord(){
+            this.addModalVisible = true;
+        },
+        onUploadFile(packageId,fileName){
+            this.$refs.packageFile.value = '';
+            this.packageid = packageId;
+            this.filename = fileName;
+            this.uploadFileModalVisible = true;
+        },
+        onUploadPackage(){
+            let formData = new FormData();
+                // formData = {
+                // packageid: this.packageid,
+                // packagefile: this.packageFile
+                // };
+                formData.append( 'id', this.packageid );
+                formData.append( 'packageFile', this.packageFile );
+            this.packageService.onUploadPackageFile(formData);
             this.packages =  this.packageService.getPackage();
             this.closeModal();
         },
-        onUploadPackage(){
-            const formData = {
-                packageid: this.id,
-                packagefile: this.packageFile
-                }
-                console.log(formData);
+        handleFileUpload(){
+            this.packageFile = this.$refs.packageFile.files[0];
         }
     }
 }

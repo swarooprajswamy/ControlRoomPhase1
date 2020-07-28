@@ -38,7 +38,7 @@
                         placeholder="Global Search" size="50" />
                         
                         <Button icon="ti-plus" 
-                        @click="addModalVisible = true" 
+                        @click="onAddRecord()" 
                         class="pi pi-external-link" id="addModalVisible-button" 
                         data-toggle="modal"
                          style="margin: 0px 0px 0px 4px;">
@@ -215,6 +215,7 @@ export default {
             this.$refs.dt.exportCSV();
         },
         closeModal() {
+        this.clearFormValues();
         this.addModalVisible  = false;
         },
         onSave(){
@@ -226,13 +227,18 @@ export default {
                 stopAfter: this.stopAfter
                 }
             this.scheduleService.onSave(formData);
+            this.schedules =  this.scheduleService.getSchedules();
+            this.closeModal();
+        },
+        clearFormValues(){
             this.name = '';
             this.enivronmente = '';
             this.nextRunTimee = '';
             this.processe = '';
             this.stopAftere = '';
-            this.schedules =  this.scheduleService.getSchedules();
-            this.closeModal();
+        },
+        onAddRecord(){
+            this.addModalVisible = true;
         }
     }
 }

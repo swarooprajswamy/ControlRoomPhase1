@@ -14,7 +14,7 @@ export default class Machine {
     }
 	getMachine() {
         const machines = [];
-        machinesInstance.get('/machine/api')
+        machinesInstance.get('/machine/api/')
         .then(success => {
             const res = success.data
             let machine = [];

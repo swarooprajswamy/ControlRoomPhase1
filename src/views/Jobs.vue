@@ -39,7 +39,7 @@
                         placeholder="Global Search" size="50" />
                         
                         <Button icon="ti-plus" 
-                        @click="addModalVisible = true" 
+                        @click="onAddRecord()" 
                         class="pi pi-external-link" id="addModalVisible-button" 
                         data-toggle="modal"
                          style="margin: 0px 0px 0px 4px;">
@@ -271,8 +271,6 @@ export default {
     mounted() {
         this.loading = true;
         this.jobs =  this.jobService.getJobs();
-        this.machineList = this.jobService.getMachine();
-        this.packageList = this.jobService.getPackage();
         this.loading = false;
     },
     methods: {
@@ -283,6 +281,7 @@ export default {
             this.$refs.dt.exportCSV();
         },
         closeModal() {
+        this.clearFormValues();
         this.addModalVisible  = false;
         },
         onSave(){
@@ -295,16 +294,23 @@ export default {
                 // startedOn: this.startedOn
                 }
             this.jobService.onSave(formData);
-            this.name= '',
-            this.machine_id= 0,
-            this.package_id= 0,
-            this.status= '',
-            this.startedOn= '',
             this.jobs =  this.jobService.getJobs();
             this.closeModal();
         },
         onRunJob(url) {
             this.jobService.onRunJob(url);
+        },
+        clearFormValues(){
+            this.name = '';
+            this.machine_id = 0;
+            this.package_id = 0;
+            this.status = '';
+            this.startedOn = '';
+        },
+        onAddRecord(){
+           this.addModalVisible = true;
+            this.machineList = this.jobService.getMachine();
+            this.packageList = this.jobService.getPackage();
         }
     }
 }

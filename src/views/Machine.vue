@@ -38,7 +38,7 @@
                         placeholder="Global Search" size="50" />
                         
                         <Button icon="ti-plus" 
-                        @click="addModalVisible = true" 
+                        @click="onAddRecord()" 
                         class="pi pi-external-link" id="addModalVisible-button" 
                         data-toggle="modal"
                          style="margin: 0px 0px 0px 4px;">
@@ -236,7 +236,8 @@ export default {
             this.$refs.dt.exportCSV();
         },
         closeModal() {
-        this.addModalVisible  = false;
+            this.clearFormValues();
+            this.addModalVisible  = false;
         },
         onSave(){
             const formData = {
@@ -248,14 +249,19 @@ export default {
                 status: this.status
                 }
             this.machineService.onSave(formData);
+            this.machines =  this.machineService.getMachine();
+            this.closeModal();
+        },
+        clearFormValues(){
             this.id = 0;
             this.name = '';
             this.description = '';
             this.machineKey = '';
             this.lastAvailable = '';
             this.status = '';
-            this.machines =  this.machineService.getMachine();
-            this.closeModal();
+        },
+        onAddRecord(){
+           this.addModalVisible = true;
         }
     }
 }

@@ -115,7 +115,7 @@ export default class Jobs {
 
     getMachine() {
         const machines = [];
-        jobsInstance.get('/machine/api')
+        jobsInstance.get('machine/api/')
         .then(success => {
             const res = success.data;
             let machine = [];
@@ -139,7 +139,7 @@ export default class Jobs {
 
     getPackage() {
         const packages = [];
-        jobsInstance.get('/package/api')
+        jobsInstance.get('package/api/')
         .then(success => {
             let packageq = [];
             const res = success.data;

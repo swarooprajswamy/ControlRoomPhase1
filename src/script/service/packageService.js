@@ -14,13 +14,13 @@ export default class Package {
     }
 	getPackage() {
         const packages = [];
-        packagesInstance.get('/package/api')
+        packagesInstance.get('/package/api/')
         .then(success => {
             const res = success.data
             let packageq = [];
             for (const key in res) {
               if (Object.prototype.hasOwnProperty.call(res, key)) {
-                packageq.id = key;
+                packageq.id = res[key].id;
                 packageq.name = res[key].name;
                 packageq.description = res[key].description;
                 packageq.version = res[key].version;
@@ -80,4 +80,14 @@ export default class Package {
         .then(success => { console.log(success); })
         .catch(error => console.log(error));
     }
+    
+    onUploadPackageFile(packages){
+      packagesInstance.post('package/api/upload/', packages)
+      .then(function(){
+        console.log('SUCCESS!!');
+      })
+      .catch(function(){
+        console.log('FAILURE!!');
+      });
+  }
 }
