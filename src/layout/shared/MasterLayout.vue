@@ -7,7 +7,7 @@
             <template slot="links">
               <sidebar-link to="/Dashboard" name="Dashboard" icon="ti-view-grid"/>
               <sidebar-link to="/Jobs" name="Jobs" icon="ti-user"/>
-              <sidebar-link to="/Schedules" name="Schedulers" icon="ti-timer"/>
+              <!-- <sidebar-link to="/Schedules" name="Schedulers" icon="ti-timer"/> -->
               <sidebar-link to="/Machine" name="Machine" icon="ti-desktop"/>
               <sidebar-link to="/Package" name="Package" icon="ti-view-list-alt"/>
             </template>

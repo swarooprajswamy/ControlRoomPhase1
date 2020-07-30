@@ -284,7 +284,7 @@ export default {
         this.clearFormValues();
         this.addModalVisible  = false;
         },
-        onSave(){
+       async onSave(){
             const formData = {
                 // id: this.id,
                 name: this.name,
@@ -293,8 +293,8 @@ export default {
                 // status: this.status,
                 // startedOn: this.startedOn
                 }
-            this.jobService.onSave(formData);
-            this.jobs =  this.jobService.getJobs();
+           await this.jobService.onSave(formData);
+            this.jobs = await this.jobService.getJobs();
             this.closeModal();
         },
         onRunJob(url) {
@@ -307,10 +307,10 @@ export default {
             this.status = '';
             this.startedOn = '';
         },
-        onAddRecord(){
+       async onAddRecord(){
            this.addModalVisible = true;
-            this.machineList = this.jobService.getMachine();
-            this.packageList = this.jobService.getPackage();
+            this.machineList = await this.jobService.getMachine();
+            this.packageList = await this.jobService.getPackage();
         }
     }
 }

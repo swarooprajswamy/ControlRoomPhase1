@@ -239,7 +239,7 @@ export default {
             this.clearFormValues();
             this.addModalVisible  = false;
         },
-        onSave(){
+       async onSave(){
             const formData = {
                 id: this.id,
                 name: this.name,
@@ -248,8 +248,8 @@ export default {
                 lastAvailable: this.lastAvailable,
                 status: this.status
                 }
-            this.machineService.onSave(formData);
-            this.machines =  this.machineService.getMachine();
+            await this.machineService.onSave(formData);
+            this.machines = await this.machineService.getMachine();
             this.closeModal();
         },
         clearFormValues(){

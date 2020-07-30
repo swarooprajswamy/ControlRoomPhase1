@@ -318,7 +318,7 @@ export default {
         this.addModalVisible  = false;
         this.uploadFileModalVisible  = false;
         },
-        onSave(){
+       async onSave(){
             const formData = {
                 id: this.id,
                 name: this.name,
@@ -326,8 +326,8 @@ export default {
                 version: this.version,
                 packageFile: this.packageFile
                 }
-            this.packageService.onSave(formData);
-            this.packages =  this.packageService.getPackage();
+            await this.packageService.onSave(formData);
+            this.packages =  await this.packageService.getPackage();
             this.closeModal();
         },
         clearFormValues(){
@@ -346,16 +346,12 @@ export default {
             this.filename = fileName;
             this.uploadFileModalVisible = true;
         },
-        onUploadPackage(){
+        async onUploadPackage(){
             let formData = new FormData();
-                // formData = {
-                // packageid: this.packageid,
-                // packagefile: this.packageFile
-                // };
                 formData.append( 'id', this.packageid );
                 formData.append( 'packageFile', this.packageFile );
-            this.packageService.onUploadPackageFile(formData);
-            this.packages =  this.packageService.getPackage();
+            await this.packageService.onUploadPackageFile(formData);
+            this.packages = await this.packageService.getPackage();
             this.closeModal();
         },
         handleFileUpload(){
